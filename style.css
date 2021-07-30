@@ -1,0 +1,27 @@
+* {
+   margin: 0;
+   padding: 0;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+#title {
+    display: flex;
+    justify-content: center;
+    margin: 30px;
+    background-color:;
+}
+
+#search-box {
+    display: flex;
+    justify-content: center;
+}
+
+#display-weather {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 2;
+}
