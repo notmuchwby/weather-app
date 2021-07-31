@@ -5,21 +5,31 @@ const displayWeather = document.querySelector('#display-weather');
 
 // DISPLAY ITEMS 
 const cityName = document.createElement('p'); 
-cityName.className = "capitalize";
+cityName.id = "main-items";
+cityName.className = "first-item";
 const celsiusTemp = document.createElement('p');
+celsiusTemp.id = "main-items";
 const feelsLikeCelsiusTemp = document.createElement('p');
+feelsLikeCelsiusTemp.id = "secondary-items";
 const humidity = document.createElement('p');
+humidity.id = "secondary-items";
 const pressure = document.createElement('p');
+pressure.id = "secondary-items";
 const weather = document.createElement('p');
+weather.id = "secondary-items";
 weather.className = "capitalize";
 const changeMeasureUnitBtn = document.createElement('button');
+changeMeasureUnitBtn.id = "change-measure-btn";
+const additionalInfo = document.createElement('div');
+additionalInfo.id = "additional-info";
 
 displayWeather.appendChild(cityName);
 displayWeather.appendChild(celsiusTemp);
-displayWeather.appendChild(feelsLikeCelsiusTemp);
-displayWeather.appendChild(weather);
-displayWeather.appendChild(humidity);
-displayWeather.appendChild(pressure);
+displayWeather.appendChild(additionalInfo);
+additionalInfo.appendChild(feelsLikeCelsiusTemp);
+additionalInfo.appendChild(weather);
+additionalInfo.appendChild(humidity);
+additionalInfo.appendChild(pressure);
 displayWeather.appendChild(changeMeasureUnitBtn);
 
 let tempValue;
@@ -34,10 +44,11 @@ function frontPage() {
         return response.json();
     })
     .then(function(response) {
-        cityName.innerHTML = "London"
-        changeMeasureUnitBtn.innerHTML = "F"
-        celsiusTemp.innerHTML = "Temperature in celsius: " + parseInt(response.main.temp - 273.15);
-        feelsLikeCelsiusTemp.innerHTML = "Feels like in celsuis: " + parseInt(response.main.feels_like - 273.15);
+        console.log(response)
+        cityName.innerHTML = "London, UK"
+        changeMeasureUnitBtn.innerHTML = "°F"
+        celsiusTemp.innerHTML = parseInt(response.main.temp - 273.15) + "°C";
+        feelsLikeCelsiusTemp.innerHTML = "Feels like: " + parseInt(response.main.feels_like - 273.15) + "°C";
         humidity.innerHTML = "Humidity: " + response.main.humidity;
         pressure.innerHTML = "Pressure: " + response.main.pressure;
         weather.innerHTML = response.weather[0].description;
@@ -59,11 +70,11 @@ btnSearch.addEventListener('click', () => {
     })
     .then(function(response) {
         if(response.cod !== "404" && response.cod !== "400") {
-            cityName.innerHTML = searchBar.value.toLowerCase();
+            cityName.innerHTML = searchBar.value.toLowerCase() + ", " + response.sys.country;
             searchBar.value = "";
 
-            celsiusTemp.innerHTML = "Temperature in celsius: " + parseInt(response.main.temp - 273.15);
-            feelsLikeCelsiusTemp.innerHTML = "Feels like in celsuis: " + parseInt(response.main.feels_like - 273.15);
+            celsiusTemp.innerHTML = parseInt(response.main.temp - 273.15) + "°C";
+            feelsLikeCelsiusTemp.innerHTML = "Feels like: " + parseInt(response.main.feels_like - 273.15) + "°C";
             humidity.innerHTML = "Humidity: " + response.main.humidity;
             pressure.innerHTML = "Pressure: " + response.main.pressure;
             weather.innerHTML = response.weather[0].description;
@@ -84,14 +95,14 @@ btnSearch.addEventListener('click', () => {
 // SWICHING FROM FAHRENHEIT TO CELSIUS & VICE VERSA
 function changeUnit() {
     changeMeasureUnitBtn.addEventListener('click', () => {
-        if(changeMeasureUnitBtn.innerHTML === "F") {
-            celsiusTemp.innerHTML = "Temperature in fahrenheit: " + parseInt(tempValue * 9 / 5 - 459.67);
-            feelsLikeCelsiusTemp.innerHTML = "Feels like in fahrenheit: " + parseInt(feelsLikeTempValue * 9 / 5 - 459.67);
-            changeMeasureUnitBtn.innerHTML = "C";
-        } else if(changeMeasureUnitBtn.innerHTML === "C") {
-            celsiusTemp.innerHTML = "Temperature in celsius: " + parseInt(tempValue - 273.15);
-             feelsLikeCelsiusTemp.innerHTML = "Feels like in celsuis: " + parseInt(tempValue - 273.15);
-             changeMeasureUnitBtn.innerHTML = "F";
+        if(changeMeasureUnitBtn.innerHTML === "°F") {
+            celsiusTemp.innerHTML = parseInt(tempValue * 9 / 5 - 459.67) + "°F";
+            feelsLikeCelsiusTemp.innerHTML = "Feels like: " + parseInt(feelsLikeTempValue * 9 / 5 - 459.67) + "°F";
+            changeMeasureUnitBtn.innerHTML = "°C";
+        } else if(changeMeasureUnitBtn.innerHTML === "°C") {
+            celsiusTemp.innerHTML = parseInt(tempValue - 273.15) + "°C";
+             feelsLikeCelsiusTemp.innerHTML = "Feels like: " + parseInt(tempValue - 273.15) + "°C";
+             changeMeasureUnitBtn.innerHTML = "°F";
         }
     })
 }
